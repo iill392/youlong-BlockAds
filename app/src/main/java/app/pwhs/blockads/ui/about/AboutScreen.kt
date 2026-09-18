@@ -20,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Gavel
 import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -172,9 +173,23 @@ fun AboutScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             // Links
+            // 二改（本仓库）源码
             AboutLinkItem(
                 icon = Icons.Filled.Code,
-                title = stringResource(R.string.about_github),
+                title = stringResource(R.string.about_source_fork),
+                onClick = {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        "https://github.com/iill392/youlong-BlockAds".toUri()
+                    )
+                    context.startActivity(intent)
+                }
+            )
+
+            // 原版（上游）源码
+            AboutLinkItem(
+                icon = Icons.Filled.Public,
+                title = stringResource(R.string.about_source_original),
                 onClick = {
                     val intent = Intent(
                         Intent.ACTION_VIEW,

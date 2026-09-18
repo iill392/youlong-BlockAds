@@ -34,16 +34,24 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Blockads">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--
+              注意：这里刻意 **没有** android.intent.category.LAUNCHER，
+              因此应用安装后桌面上不会出现任何图标/快捷方式。
+              进入应用的方式：
+                1. 下拉通知栏 → 快捷设置磁贴「游龙广告插件」→ 长按 → 打开应用
+                2. 点击常驻通知（开启拦截后存在）
+                3. 桌面小组件「游龙广告插件」
+                4. 通知栏磁贴长按未生效时，可用 adb:
+                   adb shell am start -n com.youlong.gg/app.pwhs.blockads.MainActivity
+              内部所有跳转均使用显式 Intent(ComponentName)，不依赖 LAUNCHER 过滤。
+            -->
             <intent-filter>
                 <action android:name="app.pwhs.blockads.ACTION_TOGGLE_SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data

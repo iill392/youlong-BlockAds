@@ -10,6 +10,8 @@
     <string name="about_description">Free, open-source ad blocker.\nNo data collection. No tracking.</string>
     <string name="about_version">Version %s</string>
     <string name="about_github">Source Code (GitHub)</string>
+    <string name="about_source_fork">Modified Source Code (This Fork)</string>
+    <string name="about_source_original">Original Source Code (Upstream)</string>
     <string name="about_website">Website</string>
     <string name="about_privacy_policy">Privacy Policy</string>
     <string name="about_contact">Contact Us</string>

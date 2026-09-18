@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/license-GPL--3.0-blue">
   <img src="https://img.shields.io/badge/minSdk-24-green">
   <img src="https://img.shields.io/badge/targetSdk-36-green">
-  <img src="https://img.shields.io/badge/version-6.6.3-orange">
+  <img src="https://img.shields.io/badge/version-6.6.4-orange">
 </div>
 
 ---
@@ -105,7 +105,7 @@
 
 ## 下载
 
-前往 **[Releases](https://github.com/iill392/youlong-BlockAds/releases)** 页面下载（最新版 **v6.6.3**）：
+前往 **[Releases](https://github.com/iill392/youlong-BlockAds/releases)** 页面下载（最新版 **v6.6.4**）：
 
 | 文件 | 说明 |
 |---|---|
@@ -117,6 +117,21 @@
 
 > 注：GitHub Release 资产名会剥离非 ASCII 字符，因此资产文件使用英文名 `Yulong-BlockAds-*`，
 > 安装后应用名称仍为「游龙广告插件」。
+
+### ⚠️ 安装后桌面**不会出现图标**，怎么打开？
+
+从 **v6.6.4** 起，应用刻意移除了 `android.intent.category.LAUNCHER`，
+**安装完成后桌面 / 应用抽屉里都不会有任何图标或快捷方式**（避免被家人/同事一眼看到）。
+
+请用以下任一方式打开主界面：
+
+1. **快捷设置磁贴（推荐）**：下拉通知栏 → 点铅笔/编辑按钮 → 把「游龙广告插件」磁贴拖到快捷面板 →
+   以后**长按该磁贴**即可打开主界面；**点按**则是直接开关拦截。
+2. **常驻通知**：拦截开启后，通知栏会有常驻通知，点击它即可进入主界面。
+3. **桌面小组件**：长按桌面空白处 → 小组件 → 找到「游龙广告插件」添加，点击组件即可进入。
+4. **ADB**：`adb shell am start -n com.youlong.gg/app.pwhs.blockads.MainActivity`
+
+> 应用内部所有跳转（通知、磁贴、组件、开机自启）都使用显式 Intent，不依赖桌面图标，功能完全不受影响。
 
 ---
 
