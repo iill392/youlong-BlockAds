@@ -1,0 +1,5 @@
+- Added option to toggle DNS log recording in the Logs screen
+- Enabled full-tunnel mode by default for enhanced privacy
+- Fixed website hangs caused by QUIC/UDP timeouts
+- Fixed local.pwhs.app resolution in full-tunnel mode
+- Improved HTTPS filtering with cert/CA/DNS hardening

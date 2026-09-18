@@ -1,0 +1,8 @@
+- Added "Strict Family" profile.
+- Added filter chips for Firewall, App Management, and Whitelist.
+- Integrated Bloom filter for memory optimization.
+- Migrated to QUERY_ALL_PACKAGES to accurately list all installed apps.
+- Removed unsupported cosmetic filters (uBlock, Fanboy).
+- Added Turkish language support.
+- Fixed SIGSYS crash on 32-bit devices.
+- Fixed Custom DNS auto-appending /dns-query to DoT/DoQ.

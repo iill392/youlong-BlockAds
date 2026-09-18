@@ -1,0 +1,9 @@
+- Improve current languages; add Czech, German, and Hebrew language support
+- Fix rule count mismatch between home screen and filter screen
+- Add option to delay VPN restart
+- Add theme color picker
+- Add quick toggle to enable/disable user/system app firewall
+- Fix UI title on filter screen
+- Add VPN conflict detection (fix cases where conflicting VPN shows nothing)
+- Add system DNS option in DNS provider
+- Add beta label for HTTPS filtering and WireGuard VPN

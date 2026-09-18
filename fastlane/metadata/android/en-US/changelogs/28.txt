@@ -1,0 +1,6 @@
+- Improved: Smoother app navigation.
+- Fixed: Profile name display issue.
+- Fixed: VPN auto-start failing after device reboot.
+- Changed: Removed real-time auto-refresh in Logs screen.
+- Changed: Removed "Steven Black Fake News" from default filters.
+- Optimized: Cleared Trie/Bloom data from memory when no filters are active.

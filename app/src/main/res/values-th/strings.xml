@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_tagline">ท่องเว็บโดยไม่มีโฆษณา</string>
+    <string name="nav_home">หน้าหลัก</string>
+    <string name="nav_logs">บันทึก</string>
+    <string name="nav_filter">ตัวกรอง</string>
+    <string name="nav_settings">การตั้งค่า</string>
+    <string name="test_block_ads">ทดสอบการบล็อกโฆษณา</string>
+    <string name="home_connecting_desc">กำลังสร้างการเชื่อมต่อ VPN…</string>
+    <string name="home_protected_desc">อุปกรณ์ของคุณได้รับการปกป้องจากโฆษณา</string>
+    <string name="home_unprotected_desc">แตะปุ่มเพื่อเปิดใช้งานการบล็อกโฆษณา</string>
+    <string name="home_block_rate">อัตราการบล็อก</string>
+    <string name="home_filter_rules">กฎตัวกรอง</string>
+    <string name="home_recent_blocked">ที่ถูกบล็อกล่าสุด</string>
+    <string name="home_data_saved">ข้อมูลที่ประหยัดได้</string>
+    <string name="home_protection_uptime">เวลาทำงาน</string>
+    <string name="home_chart_24h">24 ชั่วโมง</string>
+    <string name="home_chart_7d">7 วัน</string>
+    <string name="home_top_blocked">โดเมนที่ถูกบล็อกมากที่สุด</string>
+    <string name="home_chart_no_data">ไม่มีข้อมูล</string>
+    <string name="add">เพิ่ม</string>
+    <string name="delete">ลบ</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="nav_statistics">สถิติ</string>
+    <string name="accessibility_stat_card">%1$s: %2$s</string>
+    <string name="accessibility_navigate_back">ย้อนกลับ</string>
+    <string name="home_security_threats">ภัยคุกคามที่ถูกบล็อก</string>
+    <string name="open_settings">เปิดการตั้งค่า</string>
+    <string name="home_disconnecting_desc">กำลังหยุดการเชื่อมต่อ VPN…</string>
+    <string name="home_connecting_desc_root">กำลังสร้าง Root Proxy…</string>
+    <string name="home_disconnecting_desc_root">กำลังหยุด Root Proxy…</string>
+    <string name="home_paused_trusted_short">หยุดชั่วคราวบนเครือข่ายที่เชื่อถือได้</string>
+</resources>

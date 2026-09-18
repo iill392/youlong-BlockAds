@@ -1,0 +1,7 @@
+- Pre-bundled filter lists for instant first-launch protection
+- Haptic feedback when VPN connects/disconnects
+- Removed Share App and Rate App from settings
+- Only EasyList, EasyPrivacy, and StevenBlack enabled by default
+- Security filters (URLhaus, PhishTank, Malware Domain) now opt-in
+- Updated IzzyOnDroid and F-Droid badges on README
+- KSP updated to 2.3.6

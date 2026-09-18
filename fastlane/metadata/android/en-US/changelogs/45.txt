@@ -1,0 +1,6 @@
+- Local filter compilation now uses WorkManager (survives process death)
+- Show filter in list immediately when building locally
+- Fix switch build mode stuck loading
+- Fix local filter update not working
+- Fix Update All now uses WorkManager for local filters
+- Hide rules count and date while filter is compiling

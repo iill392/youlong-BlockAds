@@ -1,0 +1,7 @@
+- Added Blacklist Domain Manager.
+- Added detailed request sources to the Log screen.
+- Moved Whitelist to a standalone screen.
+- Relocated Logs & Statistics to the Home screen top bar.
+- Moved Firewall & DNS Provider to the bottom navigation.
+- Added Edit Profile shortcut directly to the Home screen.
+- Added a toggle for bottom navigation labels in Interface Settings.

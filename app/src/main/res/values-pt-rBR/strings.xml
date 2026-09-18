@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_tagline">Navegação sem anúncios</string>
+    <string name="nav_home">Início</string>
+    <string name="nav_logs">Registros</string>
+    <string name="nav_filter">Filtro</string>
+    <string name="nav_settings">Configurações</string>
+    <string name="test_block_ads">Testar bloqueio de anúncios</string>
+    <string name="home_connecting_desc">Estabelecendo conexão VPN…</string>
+    <string name="home_protected_desc">Seu dispositivo está protegido contra anúncios</string>
+    <string name="home_unprotected_desc">Toque no botão para ativar o bloqueio de anúncios</string>
+    <string name="home_block_rate">Taxa de bloqueio</string>
+    <string name="home_filter_rules">Regras de filtro</string>
+    <string name="home_recent_blocked">Bloqueados recentemente</string>
+    <string name="home_data_saved">Dados economizados</string>
+    <string name="home_protection_uptime">Tempo de atividade</string>
+    <string name="home_chart_24h">24 horas</string>
+    <string name="home_chart_7d">7 dias</string>
+    <string name="home_top_blocked">Domínios mais bloqueados</string>
+    <string name="home_chart_no_data">Nenhum dado disponível</string>
+    <string name="add">Adicionar</string>
+    <string name="delete">Excluir</string>
+    <string name="cancel">Cancelar</string>
+    <string name="home_security_threats">Ameaças bloqueadas</string>
+    <string name="nav_statistics">Estatísticas</string>
+    <string name="accessibility_stat_card">%1$s: %2$s</string>
+    <string name="accessibility_navigate_back">Voltar</string>
+    <string name="open_settings">Abrir Configurações</string>
+    <string name="home_disconnecting_desc">Parando a conexão VPN…</string>
+    <string name="home_connecting_desc_root">Estabelecendo Root Proxy…</string>
+    <string name="home_disconnecting_desc_root">Parando Root Proxy…</string>
+    <string name="home_paused_trusted_short">Pausado em rede confiável</string>
+</resources>

@@ -1,0 +1,60 @@
+default_platform(:android)
+
+platform :android do
+
+  desc "Run tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Build debug APK"
+  lane :build_debug do
+    gradle(
+      task: "assembleDebug"
+    )
+  end
+
+  desc "Build release APK"
+  lane :build_release do
+    gradle(
+          task: "assembleRelease"
+    )
+  end
+
+  desc "Increment version code"
+  lane :bump_version do |options|
+    version_name = options[:version] || "1.0"
+    
+    # Files to update
+    files = ["../app/build.gradle.kts", "../blockadstv/build.gradle.kts"]
+    
+    # Get current versionCode from app module as source of truth
+    app_gradle = File.read(files[0])
+    current_code = app_gradle.match(/versionCode = (\d+)/)[1].to_i
+    new_code = current_code + 1
+
+    files.each do |file_path|
+      content = File.read(file_path)
+      # Update versionCode
+      content = content.gsub(
+        /versionCode = \d+/,
+        "versionCode = #{new_code}"
+      )
+      # Update versionName
+      content = content.gsub(
+        /versionName = ".*"/,
+        "versionName = \"#{version_name}\""
+      )
+      File.write(file_path, content)
+    end
+
+    UI.success("✅ Bumped to versionCode=#{new_code}, versionName=#{version_name} for all modules")
+  end
+
+  desc "Trigger GitHub Action to auto-build Go Tunnel"
+  lane :update_tunnel do
+    UI.message("Triggering GitHub Action: update_tunnel.yml...")
+    sh("gh workflow run update_tunnel.yml --ref main")
+    UI.success("✅ Workflow triggered! Vui lòng chờ 2-3 phút cho Bot build xong, sau đó chạy 'git pull' nhé!")
+  end
+end

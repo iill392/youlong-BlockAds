@@ -1,0 +1,4 @@
+- Enhance bottom navigation layout.
+- Move Domain Whitelist and Blocklist to the bottom bar.
+- Fix an issue where filter details display cached content.
+- Fix text widget alignment.

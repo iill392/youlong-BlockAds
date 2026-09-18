@@ -1,0 +1,1 @@
+- Fixed: Whitelist and blocklist domain not working

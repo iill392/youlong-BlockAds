@@ -1,0 +1,228 @@
+package app.pwhs.blockads.data
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import app.pwhs.blockads.data.dao.CustomDnsRuleDao
+import app.pwhs.blockads.data.dao.DnsErrorDao
+import app.pwhs.blockads.data.dao.DnsLogDao
+import app.pwhs.blockads.data.dao.FilterListDao
+import app.pwhs.blockads.data.dao.FirewallRuleDao
+import app.pwhs.blockads.data.dao.ProtectionProfileDao
+import app.pwhs.blockads.data.dao.WhitelistDomainDao
+import app.pwhs.blockads.data.entities.CustomDnsRule
+import app.pwhs.blockads.data.entities.DnsErrorEntry
+import app.pwhs.blockads.data.entities.DnsLogEntry
+import app.pwhs.blockads.data.entities.FilterList
+import app.pwhs.blockads.data.entities.FirewallRule
+import app.pwhs.blockads.data.entities.ProfileSchedule
+import app.pwhs.blockads.data.entities.ProtectionProfile
+import app.pwhs.blockads.data.entities.WhitelistDomain
+
+@Database(
+    entities = [DnsLogEntry::class, FilterList::class, WhitelistDomain::class, DnsErrorEntry::class, CustomDnsRule::class, FirewallRule::class, ProtectionProfile::class, ProfileSchedule::class],
+    version = 13,
+    exportSchema = false
+)
+abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun dnsLogDao(): DnsLogDao
+    abstract fun filterListDao(): FilterListDao
+    abstract fun whitelistDomainDao(): WhitelistDomainDao
+    abstract fun dnsErrorDao(): DnsErrorDao
+    abstract fun customDnsRuleDao(): CustomDnsRuleDao
+    abstract fun protectionProfileDao(): ProtectionProfileDao
+    abstract fun firewallRuleDao(): FirewallRuleDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `filter_lists` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `name` TEXT NOT NULL,
+                        `url` TEXT NOT NULL,
+                        `isEnabled` INTEGER NOT NULL DEFAULT 1,
+                        `domainCount` INTEGER NOT NULL DEFAULT 0,
+                        `lastUpdated` INTEGER NOT NULL DEFAULT 0
+                    )"""
+                )
+            }
+        }
+
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `whitelist_domains` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `domain` TEXT NOT NULL,
+                        `addedTimestamp` INTEGER NOT NULL DEFAULT 0
+                    )"""
+                )
+            }
+        }
+
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN description TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN isBuiltIn INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `dns_errors` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `domain` TEXT NOT NULL,
+                        `timestamp` INTEGER NOT NULL,
+                        `error_type` TEXT NOT NULL,
+                        `error_message` TEXT NOT NULL,
+                        `upstream_dns` TEXT NOT NULL,
+                        `attempted_fallback` INTEGER NOT NULL DEFAULT 0
+                    )"""
+                )
+            }
+        }
+
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE dns_logs ADD COLUMN appName TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `custom_dns_rules` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `rule` TEXT NOT NULL,
+                        `ruleType` TEXT NOT NULL,
+                        `domain` TEXT NOT NULL,
+                        `isEnabled` INTEGER NOT NULL DEFAULT 1,
+                        `addedTimestamp` INTEGER NOT NULL DEFAULT 0
+                    )"""
+                )
+            }
+        }
+
+        private val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_dns_logs_timestamp` ON `dns_logs` (`timestamp`)")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_dns_logs_isBlocked_domain` ON `dns_logs` (`isBlocked`, `domain`)")
+            }
+        }
+
+        private val MIGRATION_8_9 = object : Migration(8, 9) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE dns_logs ADD COLUMN resolvedIp TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE dns_logs ADD COLUMN blockedBy TEXT NOT NULL DEFAULT ''")
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_dns_logs_appName` ON `dns_logs` (`appName`)")
+            }
+        }
+
+        private val MIGRATION_9_10 = object : Migration(9, 10) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `protection_profiles` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `name` TEXT NOT NULL,
+                        `profileType` TEXT NOT NULL,
+                        `enabledFilterUrls` TEXT NOT NULL DEFAULT '',
+                        `safeSearchEnabled` INTEGER NOT NULL DEFAULT 0,
+                        `youtubeRestrictedMode` INTEGER NOT NULL DEFAULT 0,
+                        `isActive` INTEGER NOT NULL DEFAULT 0,
+                        `createdAt` INTEGER NOT NULL DEFAULT 0
+                    )"""
+                )
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `profile_schedules` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `profileId` INTEGER NOT NULL,
+                        `startHour` INTEGER NOT NULL,
+                        `startMinute` INTEGER NOT NULL,
+                        `endHour` INTEGER NOT NULL,
+                        `endMinute` INTEGER NOT NULL,
+                        `isEnabled` INTEGER NOT NULL DEFAULT 1,
+                        `daysOfWeek` TEXT NOT NULL DEFAULT '1,2,3,4,5,6,7',
+                        FOREIGN KEY(`profileId`) REFERENCES `protection_profiles`(`id`) ON DELETE CASCADE
+                    )"""
+                )
+                db.execSQL("CREATE INDEX IF NOT EXISTS `index_profile_schedules_profileId` ON `profile_schedules` (`profileId`)")
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN category TEXT NOT NULL DEFAULT 'AD'")
+                db.execSQL(
+                    """CREATE TABLE IF NOT EXISTS `firewall_rules` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `packageName` TEXT NOT NULL,
+                        `blockWifi` INTEGER NOT NULL DEFAULT 1,
+                        `blockMobileData` INTEGER NOT NULL DEFAULT 1,
+                        `scheduleEnabled` INTEGER NOT NULL DEFAULT 0,
+                        `scheduleStartHour` INTEGER NOT NULL DEFAULT 22,
+                        `scheduleStartMinute` INTEGER NOT NULL DEFAULT 0,
+                        `scheduleEndHour` INTEGER NOT NULL DEFAULT 6,
+                        `scheduleEndMinute` INTEGER NOT NULL DEFAULT 0,
+                        `isEnabled` INTEGER NOT NULL DEFAULT 1
+                    )"""
+                )
+                db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_firewall_rules_packageName` ON `firewall_rules` (`packageName`)")
+            }
+        }
+
+        private val MIGRATION_10_11 = object : Migration(10, 11) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE dns_logs ADD COLUMN packageName TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN bloomUrl TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN trieUrl TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN cssUrl TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN ruleCount INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN originalUrl TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
+        private val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE filter_lists ADD COLUMN scriptletsUrl TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
+        fun getInstance(context: Context): AppDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "blockads_database"
+                )
+                    .addMigrations(
+                        MIGRATION_1_2,
+                        MIGRATION_2_3,
+                        MIGRATION_3_4,
+                        MIGRATION_4_5,
+                        MIGRATION_5_6,
+                        MIGRATION_6_7,
+                        MIGRATION_7_8,
+                        MIGRATION_8_9,
+                        MIGRATION_9_10,
+                        MIGRATION_10_11,
+                        MIGRATION_11_12,
+                        MIGRATION_12_13
+                    )
+                    .fallbackToDestructiveMigration(false)
+                    .build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
+}
+

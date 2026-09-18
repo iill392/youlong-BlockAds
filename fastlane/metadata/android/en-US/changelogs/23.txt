@@ -1,0 +1,4 @@
+- Wildcard domain support for blocklists.
+- Improved VPN startup time and memory usage.
+- Fixed DoH connection dropping.
+- Core Engine Migration: Upgraded from Kotlin to Go for better stability and Android 15 compatibility.

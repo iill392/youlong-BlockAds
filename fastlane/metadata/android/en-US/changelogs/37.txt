@@ -1,0 +1,4 @@
+- Fixed an issue where HTTPS Filtering stalled at 50% loading.
+- Fixed Auto-Start and Quick Settings tile for Root Proxy mode.
+- Added a "Pause for 1 hour" feature to Root Proxy mode.
+- Added an option to export logs from the Logs screen.

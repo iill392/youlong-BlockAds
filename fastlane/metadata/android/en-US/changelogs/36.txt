@@ -1,0 +1,5 @@
+- Root Proxy Mode: Route traffic via iptables! Free up your VPN slot for other apps.
+- Automation Support: Control BlockAds using Tasker or MacroDroid.
+- Crash Reporting: Opt-in Sentry integration to squash bugs faster (zero PII tracked).
+- French Translation: Big thanks to @Mickael81 and @thangnq-apero!
+- Under-the-hood string optimizations.

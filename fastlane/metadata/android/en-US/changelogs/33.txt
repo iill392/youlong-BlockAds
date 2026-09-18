@@ -1,0 +1,1 @@
+- BlockAds can not read all filters

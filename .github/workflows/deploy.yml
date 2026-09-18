@@ -1,0 +1,122 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & Deploy to Github Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set Version Name
+        run: echo "VERSION_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+            ~/.gradle/daemon
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle.kts', '**/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # Signing
+      - name: Decode keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > blockads-release.jks
+
+      - name: Create key.properties
+        run: |
+          cat > key.properties <<EOF
+          storeFile=blockads-release.jks
+          storePassword=${{ secrets.STORE_PASSWORD }}
+          keyAlias=${{ secrets.KEY_ALIAS }}
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          EOF
+
+      - name: Create Sentry properties file
+        run: |
+          echo "auth.token=${{ secrets.SENTRY_AUTH_TOKEN }}" > sentry.properties    
+
+      # Build & Deploy
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23.5'
+
+      - name: Build tunnel.aar natively
+        run: |
+          # Install NDK r26b using sdkmanager
+          mkdir -p $ANDROID_HOME/cmdline-tools
+          export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+          yes | sdkmanager --licenses > /dev/null 2>&1
+          sdkmanager "ndk;26.1.10909125" "platforms;android-24"
+
+          # Install patched gomobile from SagerNet (to strip paths)
+          export GOFLAGS='-buildvcs=false'
+          go install github.com/sagernet/gomobile/cmd/gomobile@v0.1.12
+          gomobile init
+          
+          # Build tunnel.aar
+          mkdir -p app/libs
+          mkdir -p blockadstv/libs
+          cd tunnel
+          export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/26.1.10909125
+          gomobile bind -target=android -androidapi 24 -trimpath \
+            -ldflags='-s -w -buildid= -extldflags=-Wl,-z,max-page-size=16384' \
+            -o ../app/libs/tunnel.aar github.com/nqmgaming/blockads-tunnel
+          cp ../app/libs/tunnel.aar ../blockadstv/libs/tunnel.aar
+
+      - name: Build APK
+        run: bundle exec fastlane build_release
+
+      # Artifacts
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-build
+          path: |
+            app/build/outputs/apk/release/*.apk
+            blockadstv/build/outputs/apk/release/*.apk
+          retention-days: 30
+
+      # Upload assets to existing GitHub Release (or create if missing)
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ env.VERSION_NAME }}
+          draft: false
+          prerelease: false
+          files: |
+            app/build/outputs/apk/release/*.apk
+            blockadstv/build/outputs/apk/release/*.apk
+          token: ${{ secrets.GITHUB_TOKEN }}

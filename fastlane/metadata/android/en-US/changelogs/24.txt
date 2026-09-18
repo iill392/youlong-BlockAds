@@ -1,0 +1,3 @@
+Fixed: Per-app firewall functionality is now fully restored and working correctly.
+Improved: Real-time DNS logs and statistics on the Home screen are now faster and more accurate.
+New: Added support for Arabic languages (thanks Abdul Haq).

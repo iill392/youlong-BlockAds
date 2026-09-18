@@ -1,0 +1,71 @@
+package app.pwhs.blockads.ui.onboarding
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import app.pwhs.blockads.data.datastore.AppPreferences
+import app.pwhs.blockads.data.entities.DnsProtocol
+import app.pwhs.blockads.data.entities.DnsProvider
+import app.pwhs.blockads.data.entities.DnsProviders
+import app.pwhs.blockads.ui.onboarding.data.ProtectionLevel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class OnboardingViewModel(
+    private val appPrefs: AppPreferences,
+    application: Application
+) : AndroidViewModel(application) {
+
+    // Default to the strongest protection level so blocking is maximal
+    // out of the box; the user can still downgrade during onboarding.
+    private val _selectedProtectionLevel = MutableStateFlow(ProtectionLevel.STRICT)
+    val selectedProtectionLevel: StateFlow<ProtectionLevel> = _selectedProtectionLevel.asStateFlow()
+
+    fun selectProtectionLevel(level: ProtectionLevel) {
+        _selectedProtectionLevel.value = level
+    }
+
+    suspend fun completeOnboarding() {
+        // Save protection level
+        appPrefs.setProtectionLevel(_selectedProtectionLevel.value.name)
+
+        // Save DNS provider. The onboarding picker was removed, so the system
+        // resolver is used by default; it can still be changed from Settings.
+        val provider = DnsProviders.SYSTEM
+        appPrefs.setDnsProviderId(provider.id)
+        appPrefs.setUpstreamDns(provider.ipAddress)
+
+        // Set protocol based on provider capabilities
+        if (provider.dohUrl != null) {
+            if (provider.dohUrl.startsWith("quic://", ignoreCase = true)) {
+                appPrefs.setDnsProtocol(DnsProtocol.DOQ)
+            } else {
+                appPrefs.setDnsProtocol(DnsProtocol.DOH)
+            }
+            appPrefs.setDohUrl(provider.dohUrl)
+        } else {
+            appPrefs.setDnsProtocol(DnsProtocol.PLAIN)
+        }
+
+        appPrefs.setFallbackDns(selectFallbackDns(provider).ipAddress)
+
+        // Mark onboarding as completed
+        appPrefs.setOnboardingCompleted(true)
+    }
+
+    /**
+     * Select a fallback DNS provider different from the primary one.
+     * Uses privacy-friendly Quad9 ↔ AdGuard pairing for standard fallbacks.
+     */
+    private fun selectFallbackDns(primary: DnsProvider): DnsProvider {
+        return when (primary.id) {
+            DnsProviders.QUAD9.id, DnsProviders.QUAD9_DOQ.id -> DnsProviders.ADGUARD
+            DnsProviders.ADGUARD.id -> DnsProviders.QUAD9
+            DnsProviders.SYSTEM.id -> DnsProviders.QUAD9
+            else -> DnsProviders.ALL_PROVIDERS.firstOrNull {
+                it.id != primary.id
+            } ?: DnsProviders.QUAD9
+        }
+    }
+}

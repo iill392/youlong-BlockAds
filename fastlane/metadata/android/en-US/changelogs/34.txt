@@ -1,0 +1,6 @@
+- Added support for Polish, Brazilian Portuguese, Indonesian, and Ukrainian languages.
+- Disabled EasyPrivacy list by default.
+- Fixed an issue where the blocked threats count was displaying zero.
+- Fixed the update toast notification showing 0 for custom rule counts.
+- Added missing buttons to add domains to the Blocklist/Whitelist in the Domain Rules screen.
+- Fixed an issue where the auto-update background worker was not fetching new filters from the network.

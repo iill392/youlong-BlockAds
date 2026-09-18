@@ -1,0 +1,6 @@
+New: Added Mullvad DNS and Hagezi filter list.
+New: Show app icons and package names in the Per-app DNS statistics.
+Improved: Rewrote the domain trie memory-mapping in Go for significantly better performance and lower battery usage.
+Improved: Custom rules & whitelists now load instantly when starting protection.
+Fixed: VPN status incorrectly showing "network connecting" after config changes.
+Fixed: Improved parsing of filter lists with tab spaces (e.g. URLhaus).

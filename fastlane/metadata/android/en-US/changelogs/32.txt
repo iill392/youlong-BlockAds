@@ -1,0 +1,4 @@
+- Use server to build binary file, import filter now faster, app run faster
+- Added edit custom filter, add check block domain and block count too
+- Added dialog confirm clear logs
+- Enhanced logs (source block)

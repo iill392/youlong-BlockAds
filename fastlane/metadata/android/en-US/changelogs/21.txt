@@ -1,0 +1,9 @@
+- Wildcard domain support for blocklists (e.g., *.ads.example.com).
+- Wildcard rules in Custom Rules (block & allow).
+- Italian (IT) localization 🇮🇹.
+- Fallback DNS now optional.
+- DNS error notifications on repeated failures.
+- DoQ: replaced Cronet with Kwik (FOSS-compatible).
+- Improved VPN startup time.
+- Fixed DoH EOFException (VPN routing loop).
+- Fixed DNS not updating when switching providers.

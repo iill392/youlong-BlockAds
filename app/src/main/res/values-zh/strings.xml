@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_tagline">无广告浏览</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_logs">日志</string>
+    <string name="nav_filter">过滤器</string>
+    <string name="nav_settings">设置</string>
+    <string name="test_block_ads">测试广告拦截</string>
+    <string name="home_connecting_desc">正在建立VPN连接…</string>
+    <string name="home_protected_desc">您的设备已受到广告保护</string>
+    <string name="home_unprotected_desc">点击按钮以启用广告拦截</string>
+    <string name="home_block_rate">拦截率</string>
+    <string name="home_filter_rules">过滤规则</string>
+    <string name="home_recent_blocked">最近拦截</string>
+    <string name="home_data_saved">节省流量</string>
+    <string name="home_protection_uptime">运行时间</string>
+    <string name="home_chart_24h">24小时</string>
+    <string name="home_chart_7d">7天</string>
+    <string name="home_top_blocked">拦截最多的域名</string>
+    <string name="home_chart_no_data">暂无数据</string>
+    <string name="add">添加</string>
+    <string name="delete">删除</string>
+    <string name="cancel">取消</string>
+    <string name="nav_statistics">统计</string>
+    <string name="accessibility_stat_card">%1$s: %2$s</string>
+    <string name="accessibility_navigate_back">返回</string>
+    <string name="home_security_threats">已拦截威胁</string>
+    <string name="open_settings">打开设置</string>
+    <string name="home_disconnecting_desc">正在停止 VPN 连接…</string>
+    <string name="home_connecting_desc_root">正在建立 Root Proxy…</string>
+    <string name="home_disconnecting_desc_root">正在停止 Root Proxy…</string>
+    <string name="home_paused_trusted_short">已在信任的网络上暂停</string>
+</resources>

@@ -1,0 +1,11 @@
+- Fix custom filter statistics always showing 0
+- Fix DNS interception not working in WireGuard mode
+- Fix screen wake from notification updates (Always-On Display)
+- Fix Root Proxy status text showing "VPN" incorrectly
+- Add hide from recent apps toggle
+- Add auto-restart service after app update
+- Add split-DNS for WireGuard internal domains
+- Add exclude LAN from WireGuard tunnel
+- Add local on-device filter compilation (no server needed)
+- Add switch build mode (local/server) for custom filters
+- Translations updated for all 18 languages

@@ -1,0 +1,5 @@
+- Added DNS-over-QUIC (DoQ) support for ultra-fast, 0-RTT queries (use quic:// prefix in Custom DNS).
+- Added Russian (RU) localization 🇷🇺.
+- Implemented concurrent DNS processing to significantly speed up browsing and fix DoH slowdowns.
+- Simplified Settings by moving all Custom DNS inputs into a single dedicated screen.
+- Fixed Firewall navigation
