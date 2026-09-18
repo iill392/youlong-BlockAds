@@ -1,9 +1,13 @@
 name: Deploy
 
+# NOTE (fork): upstream triggered this workflow on every `v*` tag push.
+# This fork publishes its own locally signed APKs to GitHub Releases via API,
+# and does not configure the upstream signing/Sentry secrets, so the automatic
+# tag trigger was removed. Run it manually from the Actions tab if you set up
+# the required secrets (KEYSTORE_BASE64, STORE_PASSWORD, KEY_ALIAS,
+# KEY_PASSWORD, SENTRY_AUTH_TOKEN).
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch:
 
 concurrency:
   group: deploy-${{ github.ref }}

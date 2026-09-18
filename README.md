@@ -105,15 +105,18 @@
 
 ## 下载
 
-本仓库的 Release 提供两种 APK：
+前往 **[Releases](https://github.com/iill392/youlong-BlockAds/releases)** 页面下载（最新版 **v6.6.3**）：
 
 | 文件 | 说明 |
 |---|---|
-| `游龙广告插件-vX.Y.Z.apk` | **通用版**，含全部 ABI（arm64 / armv7 / x86 / x86_64），体积较大 |
-| `游龙广告插件-vX.Y.Z-arm64.apk` | **arm64 精简版**，仅含 64 位 ARM，体积约为通用版 1/3，现代手机推荐 |
+| `Yulong-BlockAds-vX.Y.Z-universal.apk` | **通用版**，含全部 ABI（arm64 / armv7 / x86 / x86_64），体积较大（约 59 MB） |
+| `Yulong-BlockAds-vX.Y.Z-arm64.apk` | **arm64 精简版**，仅含 64 位 ARM，体积约为通用版 1/3（约 22 MB），现代手机推荐 |
 
 > 与上游版本 `app.pwhs.blockads` 包名不同（本仓库为 `com.youlong.gg`），两者可共存。
 > 但**切换来源时需先卸载**，因为签名不同。
+
+> 注：GitHub Release 资产名会剥离非 ASCII 字符，因此资产文件使用英文名 `Yulong-BlockAds-*`，
+> 安装后应用名称仍为「游龙广告插件」。
 
 ---
 
