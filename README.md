@@ -240,6 +240,21 @@ Copyright (C) 2026 iill392          (本仓库二次开发部分, https://github
 
 ---
 
+## 已知问题 / 安全说明
+
+GitHub Dependabot 会在本仓库报出若干依赖告警，来源均已核查：
+
+| 来源 | 数量 | 说明 |
+|---|---|---|
+| `tunnel/go.mod` | 20 | 上游 `blockads-tunnel` Go 模块的间接依赖（`golang.org/x/crypto`、`golang.org/x/net`、`quic-go`、`go-chi/chi`）。**这些仅影响「重新编译 tunnel.aar」的流程**，本仓库已提交编译好的 `tunnel.aar`，APK 中不包含 Go 源码 |
+| `Gemfile.lock` | 5 | 仅供 CI 发布流程使用的 fastlane 开发工具链（`faraday`、`jwt`、`excon`、`addressable`、`json`），**不进入 APK** |
+
+上游仓库同样存在这些告警。如需重新编译 `tunnel/`，建议先执行 `cd tunnel && go get -u ./... && go mod tidy` 再构建。
+
+发布用 APK 的 `app/libs/tunnel.aar` 与 `blockadstv/libs/tunnel.aar` 为**预编译二进制**，因此上述 Go 依赖的版本不会改变已发布 APK 的行为。
+
+---
+
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=iill392/youlong-BlockAds&type=Date)](https://star-history.com/#iill392/youlong-BlockAds&Date)
